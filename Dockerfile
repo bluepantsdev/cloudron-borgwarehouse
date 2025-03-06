@@ -44,6 +44,10 @@ RUN cp /etc/ssh/moduli /home/borgwarehouse/
 
 WORKDIR /home/borgwarehouse/app
 
+COPY start.sh ./
+
+RUN chmod +x start.sh
+
 COPY --from=builder --chown=borgwarehouse:borgwarehouse /app/docker/docker-bw-init.sh /app/LICENSE ./
 COPY --from=builder --chown=borgwarehouse:borgwarehouse /app/helpers/shells ./helpers/shells
 COPY --from=builder --chown=borgwarehouse:borgwarehouse /app/.next/standalone ./
@@ -57,4 +61,5 @@ USER borgwarehouse
 
 EXPOSE 3000 22
 
-ENTRYPOINT ["./docker-bw-init.sh"]
+# ENTRYPOINT ["./docker-bw-init.sh"]
+ENTRYPOINT ["./start.sh"]
