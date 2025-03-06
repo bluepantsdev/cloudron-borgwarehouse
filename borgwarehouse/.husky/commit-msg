@@ -1,0 +1,5 @@
+# run commit lint
+npx commitlint --edit "$1"
+
+# run script to prepend message with icon
+./.husky/append-icon.sh "$1"
