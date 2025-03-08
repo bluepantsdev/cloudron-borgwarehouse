@@ -2,8 +2,7 @@
 
 set -e
 
-## custom init code
-# set the environment variables
+# Set environment variables
 export CONFIG_PATH="/app/data/config"
 export SSH_DIR="/app/data/.ssh"
 export SSH_HOST="/app/data/ssh"
@@ -11,38 +10,35 @@ export TMP_PATH="/app/data/tmp"
 export LOGS_PATH="/app/data/logs"
 export REPO_PATH="/app/data/repo"
 
-# create an array of paths
+# Create directories
 paths=($CONFIG_PATH $SSH_DIR $SSH_HOST $TMP_PATH $LOGS_PATH $REPO_PATH)
-
-# loop through the paths and create them if they don't exist
 for path in "${paths[@]}"; do
   if [[ ! -d $path ]]; then
     echo "Setting up directory $path..."
-    mkdir -p $path
+    mkdir -p "$path"
     echo "Done."
   fi
 done
-## end custom init code
 
 AUTHORIZED_KEYS_FILE="$SSH_DIR/authorized_keys"
-REPO_PATH="/home/borgwarehouse/repos"
+REPO_PATH="/app/data/repo"
 
 print_green() {
-  echo -e "\e[92m$1\e[0m";
+  echo -e "\e[92m$1\e[0m"
 }
 print_red() { 
-  echo -e "\e[91m$1\e[0m";
+  echo -e "\e[91m$1\e[0m"
 }
 
 init_ssh_server() {
   if [ -z "$(ls -A /etc/ssh)" ]; then
     print_green "/etc/ssh is empty, generating SSH host keys..."
     ssh-keygen -A
-    cp /home/borgwarehouse/moduli /etc/ssh/
+    cp /home/node/moduli /etc/ssh/
   fi
   if [ ! -f "/etc/ssh/sshd_config" ]; then
     print_green "sshd_config not found in your volume, copying the default one..."
-    cp /home/borgwarehouse/app/sshd_config /etc/ssh/
+    cp /home/node/app/sshd_config /etc/ssh/
   fi
 }
 
@@ -60,7 +56,7 @@ create_authorized_keys_file() {
     print_green "The authorized_keys file does not exist, creating..."
     touch "$AUTHORIZED_KEYS_FILE"
   fi
-    chmod 600 "$AUTHORIZED_KEYS_FILE"
+  chmod 600 "$AUTHORIZED_KEYS_FILE"
 }
 
 check_repos_directory() {
@@ -88,7 +84,6 @@ check_env() {
     print_green "CRONJOB_KEY not found or empty. Generating a random key..."
     export CRONJOB_KEY
   fi
-
   if [ -z "$NEXTAUTH_SECRET" ]; then
     NEXTAUTH_SECRET=$(openssl rand -base64 32)
     print_green "NEXTAUTH_SECRET not found or empty. Generating a random key..."
@@ -103,5 +98,5 @@ create_authorized_keys_file
 check_repos_directory
 get_SSH_fingerprints
 
-print_green "Successful initialization. BorgWarehouse is ready !"
-exec supervisord -c /home/borgwarehouse/app/supervisord.conf 
+print_green "Successful initialization. BorgWarehouse is ready!"
+exec supervisord -c /home/node/app/supervisord.conf

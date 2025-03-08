@@ -1,0 +1,69 @@
+ARG UID=1000
+ARG GID=1000
+
+FROM cloudron/base:5.0.0@sha256:04fd70dbd8ad6149c19de39e35718e024417c3e01dc9c6637eaf4a41ec4e596c AS base
+
+# build stage
+FROM base AS deps
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN npm ci --omit=dev
+
+FROM base AS builder
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+
+COPY . .
+
+RUN sed -i "s/images:/output: 'standalone',images:/" next.config.js
+
+RUN npm run build
+
+# run stage
+FROM base AS runner
+
+ARG UID
+ARG GID
+
+ENV NODE_ENV=production
+ENV HOSTNAME=
+
+# Install wget and import Debian Bookworm keys correctly
+# Install tools and import Debian Bookworm backports keys
+RUN apt-get update && \
+    apt-get install -y wget gnupg && \
+    wget -O - https://ftp-master.debian.org/keys/release-12.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/debian-bookworm-release.gpg && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 6ED0E7B82643E131 && \
+    echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y \
+        supervisor curl jq jc borgbackup/bookworm-backports openssh-server rsyslog && \
+    apt-get purge -y wget gnupg && \
+    apt-get autoremove -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -g ${GID} cloudron && useradd -m -u ${UID} -g ${GID} cloudron
+
+RUN cp /etc/ssh/moduli /home/cloudron/
+
+WORKDIR /home/cloudron/app
+
+COPY --from=builder --chown=cloudron:cloudron /app/docker/docker-bw-init.sh /app/LICENSE ./
+COPY --from=builder --chown=cloudron:cloudron /app/helpers/shells ./helpers/shells
+COPY --from=builder --chown=cloudron:cloudron /app/.next/standalone ./
+COPY --from=builder --chown=cloudron:cloudron /app/public ./public
+COPY --from=builder --chown=cloudron:cloudron /app/.next/static ./.next/static
+COPY --from=builder --chown=cloudron:cloudron /app/docker/supervisord.conf ./
+COPY --from=builder --chown=cloudron:cloudron /app/docker/rsyslog.conf /etc/rsyslog.conf
+COPY --from=builder --chown=cloudron:cloudron /app/docker/sshd_config ./
+
+USER cloudron
+
+EXPOSE 3000 22
+
+ENTRYPOINT ["./docker-bw-init.sh"]
