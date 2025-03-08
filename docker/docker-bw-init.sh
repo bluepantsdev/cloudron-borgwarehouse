@@ -2,9 +2,30 @@
 
 set -e
 
-SSH_DIR="/home/borgwarehouse/.ssh"
+## custom init code
+# set the environment variables
+export CONFIG_PATH="/app/data/config"
+export SSH_DIR="/app/data/.ssh"
+export SSH_HOST="/app/data/ssh"
+export TMP_PATH="/app/data/tmp"
+export LOGS_PATH="/app/data/logs"
+export REPO_PATH="/app/data/repo"
+
+# create an array of paths
+paths=($CONFIG_PATH $SSH_DIR $SSH_HOST $TMP_PATH $LOGS_PATH $REPO_PATH)
+
+# loop through the paths and create them if they don't exist
+for path in "${paths[@]}"; do
+  if [[ ! -d $path ]]; then
+    echo "Setting up directory $path..."
+    mkdir -p $path
+    echo "Done."
+  fi
+done
+## end custom init code
+
 AUTHORIZED_KEYS_FILE="$SSH_DIR/authorized_keys"
-REPOS_DIR="/home/borgwarehouse/repos"
+REPO_PATH="/home/borgwarehouse/repos"
 
 print_green() {
   echo -e "\e[92m$1\e[0m";
@@ -43,11 +64,11 @@ create_authorized_keys_file() {
 }
 
 check_repos_directory() {
-  if [ ! -d "$REPOS_DIR" ]; then
+  if [ ! -d "$REPO_PATH" ]; then
     print_red "The repos directory does not exist, you need to mount it as docker volume."
     exit 2
   else 
-    chmod 700 "$REPOS_DIR"
+    chmod 700 "$REPO_PATH"
   fi
 }
 

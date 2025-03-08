@@ -61,5 +61,4 @@ USER borgwarehouse
 
 EXPOSE 3000 22
 
-# ENTRYPOINT ["./docker-bw-init.sh"]
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["./docker-bw-init.sh"]
