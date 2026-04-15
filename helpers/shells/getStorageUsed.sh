@@ -23,7 +23,7 @@ if [[ -f .env ]]; then
 fi
 
 # Default value if .env not exists
-: "${home:=/home/borgwarehouse}"
+: "${home:=/app/data}"
 
 # Get the size of each repository and format as JSON
 cd "${home}"/repos

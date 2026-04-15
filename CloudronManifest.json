@@ -3,10 +3,19 @@
   "title": "Borg Warehouse",
   "author": "Shaun Sundquist <shaun@bluepants.dev>",
   "description": "Borg Warehouse",
-  "tagline": "something something",
-  "version": "0.0.3",
+  "tagline": "Web UI for BorgBackup repositories",
+  "version": "3.1.2",
   "healthCheckPath": "/",
   "httpPort": 3000,
+  "tcpPorts": {
+    "SSH_SERVER_PORT": {
+      "title": "SSH Port",
+      "description": "SSH endpoint used by Borg clients",
+      "defaultValue": 2222,
+      "containerPort": 22,
+      "enabledByDefault": true
+    }
+  },
   "addons": {
     "localstorage": {}
   },

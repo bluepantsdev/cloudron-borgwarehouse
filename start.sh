@@ -8,7 +8,7 @@ export SSH_PATH="/app/data/.ssh"
 export SSH_HOST="/app/data/ssh"
 export TMP_PATH="/app/data/tmp"
 export LOGS_PATH="/app/data/logs"
-export REPO_PATH="/app/data/repo"
+export REPO_PATH="/app/data/repos"
 
 # create an array of paths
 paths=($CONFIG_PATH $SSH_PATH $SSH_HOST $TMP_PATH $LOGS_PATH $REPO_PATH)

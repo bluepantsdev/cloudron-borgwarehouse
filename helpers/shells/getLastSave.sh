@@ -24,7 +24,7 @@ if [[ -f .env ]]; then
 fi
 
 # Default value if .env not exists
-: "${home:=/home/borgwarehouse}"
+: "${home:=/app/data}"
 
 if [ -n "$(find -L "${home}"/repos -mindepth 1 -maxdepth 1 -type d)" ]; then
   stat --format='{"repositoryName":"%n","lastSave":%Y}' \

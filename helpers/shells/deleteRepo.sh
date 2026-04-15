@@ -13,7 +13,7 @@ if [[ -f .env ]]; then
 fi
 
 # Default value if .env not exists
-: "${home:=/home/borgwarehouse}"
+: "${home:=/app/data}"
 
 # Some variables
 pool="${home}/repos"

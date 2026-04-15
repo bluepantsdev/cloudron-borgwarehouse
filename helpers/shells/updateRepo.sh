@@ -13,7 +13,7 @@ if [[ -f .env ]]; then
 fi
 
 # Default value if .env not exists
-: "${home:=/home/borgwarehouse}"
+: "${home:=/app/data}"
 
 # Check args
 if [ "$1" == "" ] || [ "$2" == "" ] || [ "$3" == "" ] || [ "$4" != "true" ] && [ "$4" != "false" ]; then

@@ -59,8 +59,6 @@ COPY --from=builder --chown=node:node /app/docker/supervisord.conf ./
 COPY --from=builder --chown=node:node /app/docker/rsyslog.conf /etc/rsyslog.conf
 COPY --from=builder --chown=node:node /app/docker/sshd_config ./
 
-USER node
-
 EXPOSE 3000 22
 
 ENTRYPOINT ["./docker-bw-init.sh"]

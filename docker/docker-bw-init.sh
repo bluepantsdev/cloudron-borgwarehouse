@@ -8,7 +8,8 @@ export SSH_DIR="/app/data/.ssh"
 export SSH_HOST="/app/data/ssh"
 export TMP_PATH="/app/data/tmp"
 export LOGS_PATH="/app/data/logs"
-export REPO_PATH="/app/data/repo"
+export REPO_PATH="/app/data/repos"
+export home="/app/data"
 
 # Create directories
 paths=($CONFIG_PATH $SSH_DIR $SSH_HOST $TMP_PATH $LOGS_PATH $REPO_PATH)
@@ -21,7 +22,11 @@ for path in "${paths[@]}"; do
 done
 
 AUTHORIZED_KEYS_FILE="$SSH_DIR/authorized_keys"
-REPO_PATH="/app/data/repo"
+REPO_PATH="/app/data/repos"
+
+if [ -d "/app/data/repo" ] && [ ! -d "$REPO_PATH" ]; then
+  mv /app/data/repo "$REPO_PATH"
+fi
 
 print_green() {
   echo -e "\e[92m$1\e[0m"

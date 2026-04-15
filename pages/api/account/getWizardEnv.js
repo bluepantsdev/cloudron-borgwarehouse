@@ -17,8 +17,8 @@ export default async function handler(req, res) {
       }
 
       const wizardEnv = {
-        UNIX_USER: getEnvVariable('UNIX_USER', 'borgwarehouse'),
-        FQDN: getEnvVariable('FQDN', 'localhost'),
+        UNIX_USER: getEnvVariable('UNIX_USER', 'node'),
+        FQDN: getEnvVariable('FQDN', process.env.CLOUDRON_APP_DOMAIN || 'localhost'),
         SSH_SERVER_PORT: getEnvVariable('SSH_SERVER_PORT', '22'),
         FQDN_LAN: getEnvVariable('FQDN_LAN'),
         SSH_SERVER_PORT_LAN: getEnvVariable('SSH_SERVER_PORT_LAN'),
