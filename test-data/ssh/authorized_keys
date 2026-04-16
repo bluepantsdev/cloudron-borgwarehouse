@@ -1,0 +1,1 @@
+command="cd /app/data/repos;borg serve --append-only --restrict-to-path /app/data/repos/2bb43225 --storage-quota 1G",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEygylfhBCI1FaLO54WkqAWxJ5g6KAuX1yguaTc+J4d+ shaun@frame

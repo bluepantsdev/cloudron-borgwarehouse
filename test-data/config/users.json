@@ -1,0 +1,1 @@
+[{"id":0,"email":"","username":"admin","password":"$2a$12$20yqRnuaDBH6AE0EvIUcEOzqkuBtn1wDzJdw2Beg8w9S.vEqdso0a","roles":["admin"],"emailAlert":true,"appriseAlert":false,"tokens":[{"name":"foo","token":"6b1a10ff-f39d-4352-9561-d04a90b86b61","creation":1776300062,"expiration":null,"permissions":{"create":true,"read":true,"update":true,"delete":true}}]}]

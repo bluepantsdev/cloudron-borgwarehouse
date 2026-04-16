@@ -1,0 +1,36 @@
+services:
+  borgwarehouse:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    image: borgwarehouse-local
+    container_name: borgwarehouse
+    ports:
+      - "${WEB_SERVER_PORT:-3000}:3000"
+      - "${SSH_SERVER_PORT:-2222}:22"
+    volumes:
+      # The Next.js app reads config from process.cwd()/config (/home/node/app/config).
+      # The init script creates/checks /app/data/* paths.
+      # Mounting the same host directory at both paths keeps them in sync.
+      - ./test-data/config:/app/data/config
+      - ./test-data/config:/home/node/app/config
+      - ./test-data/ssh:/app/data/.ssh
+      - ./test-data/repos:/app/data/repos
+      - ./test-data/ssh-host:/app/data/ssh
+      - ./test-data/logs:/app/data/logs
+      - ./test-data/tmp:/app/data/tmp
+    environment:
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?NEXTAUTH_SECRET must be set in .env or environment}
+      CRONJOB_KEY: ${CRONJOB_KEY:-test-cronjob-key}
+      FQDN: ${FQDN:-localhost}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
