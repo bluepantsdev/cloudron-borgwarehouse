@@ -6,6 +6,7 @@ import { alertOptions } from '../../../domain/constants';
 import repoHistory from '../../../helpers/functions/repoHistory';
 import tokenController from '../../../helpers/functions/tokenController';
 import isSshPubKeyDuplicate from '../../../helpers/functions/isSshPubKeyDuplicate';
+import getConfigDirectory from '../../../helpers/functions/getConfigDirectory';
 const util = require('node:util');
 const exec = util.promisify(require('node:child_process').exec);
 
@@ -106,7 +107,7 @@ function isValidRepoData(body) {
 }
 
 async function getRepoList() {
-  const jsonDirectory = path.join(process.cwd(), '/config');
+  const jsonDirectory = getConfigDirectory();
   const repoData = await fs.readFile(jsonDirectory + '/repo.json', 'utf8');
   return JSON.parse(repoData);
 }
@@ -148,7 +149,7 @@ async function createNewRepo(
 }
 
 async function saveRepoList(newRepoList) {
-  const jsonDirectory = path.join(process.cwd(), '/config');
+  const jsonDirectory = getConfigDirectory();
   await repoHistory(newRepoList);
   await fs.writeFile(jsonDirectory + '/repo.json', JSON.stringify(newRepoList));
 }
@@ -158,6 +159,7 @@ function handleError(error, res) {
   if (error.code === 'ENOENT') {
     res.status(500).json({ message: 'No such file or directory' });
   } else {
-    res.status(500).json({ message: error.stdout });
+    const detail = (error.stderr || error.stdout || error.message || 'unknown error').trim();
+    res.status(500).json({ message: detail });
   }
 }

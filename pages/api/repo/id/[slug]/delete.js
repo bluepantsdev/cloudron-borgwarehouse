@@ -4,6 +4,7 @@ import { authOptions } from '../../../auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
 import repoHistory from '../../../../../helpers/functions/repoHistory';
 import tokenController from '../../../../../helpers/functions/tokenController';
+import getConfigDirectory from '../../../../../helpers/functions/getConfigDirectory';
 const util = require('node:util');
 const exec = util.promisify(require('node:child_process').exec);
 
@@ -48,7 +49,7 @@ export default async function handler(req, res) {
     try {
       //console.log('API call (DELETE)');
       //Find the absolute path of the json directory
-      const jsonDirectory = path.join(process.cwd(), '/config');
+      const jsonDirectory = getConfigDirectory();
       let repoList = await fs.readFile(jsonDirectory + '/repo.json', 'utf8');
       //Parse the repoList
       repoList = JSON.parse(repoList);

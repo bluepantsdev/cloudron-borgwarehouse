@@ -3,7 +3,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyPassword } from '../../../helpers/functions/auth';
 import fs from 'fs';
-import path from 'path';
+import getConfigDirectory from '../../../helpers/functions/getConfigDirectory';
 
 const logLogin = async (message, req, success = false) => {
   const ipAddress = req.headers['x-forwarded-for'] || 'unknown';
@@ -23,7 +23,7 @@ export const authOptions = {
         const { username, password } = credentials;
         //Read the users file
         //Find the absolute path of the json directory
-        const jsonDirectory = path.join(process.cwd(), '/config');
+        const jsonDirectory = getConfigDirectory();
         //Check if the users.json file exists and initialize it if not with admin/admin.
         if (!fs.existsSync(jsonDirectory + '/users.json')) {
           fs.writeFileSync(

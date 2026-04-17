@@ -25,6 +25,8 @@ function Layout(props) {
       </>
     );
   }
+
+  return null;
 }
 
 export default Layout;

@@ -11,7 +11,7 @@ export LOGS_PATH="/app/data/logs"
 export REPO_PATH="/app/data/repos"
 export home="/app/data"
 
-# Create directories
+# Create directories and ensure node user can write to them
 paths=($CONFIG_PATH $SSH_DIR $SSH_HOST $TMP_PATH $LOGS_PATH $REPO_PATH)
 for path in "${paths[@]}"; do
   if [[ ! -d $path ]]; then
@@ -19,6 +19,7 @@ for path in "${paths[@]}"; do
     mkdir -p "$path"
     echo "Done."
   fi
+  chown node:node "$path"
 done
 
 AUTHORIZED_KEYS_FILE="$SSH_DIR/authorized_keys"
@@ -61,6 +62,7 @@ create_authorized_keys_file() {
     print_green "The authorized_keys file does not exist, creating..."
     touch "$AUTHORIZED_KEYS_FILE"
   fi
+  chown node:node "$AUTHORIZED_KEYS_FILE"
   chmod 600 "$AUTHORIZED_KEYS_FILE"
 }
 
@@ -93,6 +95,17 @@ check_env() {
     NEXTAUTH_SECRET=$(openssl rand -base64 32)
     print_green "NEXTAUTH_SECRET not found or empty. Generating a random key..."
     export NEXTAUTH_SECRET
+  fi
+  # Derive FQDN and NEXTAUTH_URL from Cloudron-provided vars if not already set
+  if [ -z "$FQDN" ]; then
+    FQDN="${CLOUDRON_APP_DOMAIN:-localhost}"
+    print_green "FQDN derived from CLOUDRON_APP_DOMAIN: $FQDN"
+    export FQDN
+  fi
+  if [ -z "$NEXTAUTH_URL" ]; then
+    NEXTAUTH_URL="${CLOUDRON_APP_ORIGIN:-http://localhost:3000}"
+    print_green "NEXTAUTH_URL derived from CLOUDRON_APP_ORIGIN: $NEXTAUTH_URL"
+    export NEXTAUTH_URL
   fi
 }
 

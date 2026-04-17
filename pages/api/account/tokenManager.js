@@ -1,8 +1,20 @@
 //Lib
 import { promises as fs } from 'fs';
-import path from 'path';
 import { authOptions } from '../auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
+import getConfigDirectory from '../../../helpers/functions/getConfigDirectory';
+
+function resolveUserIndex(usersList, session) {
+  const sessionUserId = Number(session?.user?.id);
+  if (!Number.isNaN(sessionUserId)) {
+    const userIndexById = usersList.findIndex((user) => Number(user.id) === sessionUserId);
+    if (userIndexById !== -1) {
+      return userIndexById;
+    }
+  }
+
+  return usersList.map((user) => user.username).indexOf(session.user.name);
+}
 
 export default async function handler(req, res) {
   if (req.method == 'POST') {
@@ -18,7 +30,7 @@ export default async function handler(req, res) {
 
     //Read the users file
     //Find the absolute path of the json directory
-    const jsonDirectory = path.join(process.cwd(), '/config');
+    const jsonDirectory = getConfigDirectory();
     let usersList = await fs.readFile(jsonDirectory + '/users.json', 'utf8');
     //Parse the usersList
     usersList = JSON.parse(usersList);
@@ -37,7 +49,7 @@ export default async function handler(req, res) {
     }
 
     //2 : Verify that the user of the session exists
-    const userIndex = usersList.map((user) => user.username).indexOf(session.user.name);
+    const userIndex = resolveUserIndex(usersList, session);
     if (userIndex === -1) {
       res.status(400).json({ message: 'User is incorrect.' });
       return;
@@ -56,8 +68,9 @@ export default async function handler(req, res) {
 
     //4 : Add the new token
     try {
+      const currentUser = usersList[userIndex];
       let newUsersList = usersList.map((user) =>
-        user.username == session.user.name
+        user.id == currentUser.id
           ? {
               ...user,
               tokens: [
@@ -107,13 +120,13 @@ export default async function handler(req, res) {
     try {
       //Read the users file
       //Find the absolute path of the json directory
-      const jsonDirectory = path.join(process.cwd(), '/config');
+      const jsonDirectory = getConfigDirectory();
       let usersList = await fs.readFile(jsonDirectory + '/users.json', 'utf8');
       //Parse the usersList
       usersList = JSON.parse(usersList);
 
       //Verify that the user of the session exists
-      const userIndex = usersList.map((user) => user.username).indexOf(session.user.name);
+      const userIndex = resolveUserIndex(usersList, session);
       if (userIndex === -1) {
         res.status(400).json({
           message: 'User is incorrect. Please, logout to update your session.',
@@ -163,7 +176,7 @@ export default async function handler(req, res) {
 
     //Read the users file
     //Find the absolute path of the json directory
-    const jsonDirectory = path.join(process.cwd(), '/config');
+    const jsonDirectory = getConfigDirectory();
     let usersList = await fs.readFile(jsonDirectory + '/users.json', 'utf8');
     //Parse the usersList
     usersList = JSON.parse(usersList);
@@ -175,7 +188,7 @@ export default async function handler(req, res) {
     }
 
     //2 : Verify that the user of the session exists
-    const userIndex = usersList.map((user) => user.username).indexOf(session.user.name);
+    const userIndex = resolveUserIndex(usersList, session);
     if (userIndex === -1) {
       res.status(400).json({ message: 'User is incorrect.' });
       return;
@@ -191,8 +204,9 @@ export default async function handler(req, res) {
 
     //3 : Delete the token object if it exists
     try {
+      const currentUser = usersList[userIndex];
       let newUsersList = usersList.map((user) =>
-        user.username == session.user.name
+        user.id == currentUser.id
           ? {
               ...user,
               tokens: user.tokens.filter((token) => token.name != name),

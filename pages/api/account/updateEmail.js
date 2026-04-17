@@ -1,8 +1,8 @@
 //Lib
 import { promises as fs } from 'fs';
-import path from 'path';
 import { authOptions } from '../auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
+import getConfigDirectory from '../../../helpers/functions/getConfigDirectory';
 
 export default async function handler(req, res) {
   if (req.method == 'PUT') {
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
     //Read the users file
     //Find the absolute path of the json directory
-    const jsonDirectory = path.join(process.cwd(), '/config');
+    const jsonDirectory = getConfigDirectory();
     let usersList = await fs.readFile(jsonDirectory + '/users.json', 'utf8');
     //Parse the usersList
     usersList = JSON.parse(usersList);

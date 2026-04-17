@@ -1,8 +1,8 @@
 import fs from 'fs';
-import path from 'path';
 import { authOptions } from '../../../pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
 import tokenController from '../../../helpers/functions/tokenController';
+import getConfigDirectory from '../../../helpers/functions/getConfigDirectory';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
     // GET REPO LIST
     try {
       //Find the absolute path of the json directory
-      const jsonDirectory = path.join(process.cwd(), '/config');
+      const jsonDirectory = getConfigDirectory();
       //Check if the repo.json file exists and initialize it if not.
       if (!fs.existsSync(jsonDirectory + '/repo.json')) {
         fs.writeFileSync(jsonDirectory + '/repo.json', JSON.stringify([]));

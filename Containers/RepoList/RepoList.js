@@ -29,7 +29,24 @@ export default function RepoList() {
 
   ////Datas
   //Write a fetcher function to wrap the native fetch function and return the result of a call to url in json format
-  const fetcher = async (url) => await fetch(url).then((res) => res.json());
+  const fetcher = async (url) => {
+    const response = await fetch(url);
+    let payload = {};
+
+    try {
+      payload = await response.json();
+    } catch (error) {
+      payload = {};
+    }
+
+    if (!response.ok) {
+      const apiError = new Error(payload.message || 'Request failed');
+      apiError.status = response.status;
+      throw apiError;
+    }
+
+    return payload;
+  };
   const { data, error } = useSWR('/api/repo', fetcher);
 
   ////LifeCycle
@@ -74,11 +91,19 @@ export default function RepoList() {
     return <ShimmerRepoList />;
   }
   if (error) {
-    toast.error('An error has occurred.', toastOptions);
+    if (error.status === 401) {
+      router.replace('/login');
+      return null;
+    }
+    toast.error(error.message || 'An error has occurred.', toastOptions);
     return <ToastContainer />;
   }
   if (data.status == 500) {
     toast.error('API Error !', toastOptions);
+    return <ToastContainer />;
+  }
+  if (!Array.isArray(data.repoList)) {
+    toast.error('Unexpected API response.', toastOptions);
     return <ToastContainer />;
   }
 
