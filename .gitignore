@@ -112,3 +112,6 @@ dist
 # config file for BorgWarehouse
 config/repo.json
 config/users.json
+
+# Temp test/runtime artifacts
+test-data/tmp/

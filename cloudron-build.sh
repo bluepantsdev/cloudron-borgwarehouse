@@ -61,32 +61,34 @@ get_dockerfile_version() {
     grep -oP 'org\.opencontainers\.image\.version="\K[^"]+' "${DOCKERFILE}" 2>/dev/null || echo "ERROR"
 }
 
-# Increment version. Supports two BluePants formats:
+# Increment version. Supports Cloudron-compatible package semver variants:
 #   N.N.N         (original BluePants app)        — bumps patch
-#   N.N.N-N.N     (repackaged third-party app)    — bumps packaging minor
-#   N.N.N-N       (legacy single-digit packaging) — interprets as -N.0, returns -N.1
+#   N.N.N-N       (repackaged third-party app)    — bumps packaging iteration
+#   N.N.N-N.N     (legacy, no longer valid)       — migrated to N.N.N-(N*10+N), then incremented
 increment_version() {
     local version="$1"
 
-    # N.N.N-N.N (repackaged third-party app)
+    # N.N.N-N.N (legacy repackaged format) -> migrate to flat numeric suffix
     if [[ "${version}" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)\.([0-9]+)$ ]]; then
         local maj="${BASH_REMATCH[1]}"
         local min="${BASH_REMATCH[2]}"
         local pat="${BASH_REMATCH[3]}"
         local pkg_maj="${BASH_REMATCH[4]}"
         local pkg_min="${BASH_REMATCH[5]}"
-        pkg_min=$((pkg_min + 1))
-        echo "${maj}.${min}.${pat}-${pkg_maj}.${pkg_min}"
+        local pkg_iter=$((pkg_maj * 10 + pkg_min))
+        pkg_iter=$((pkg_iter + 1))
+        echo "${maj}.${min}.${pat}-${pkg_iter}"
         return
     fi
 
-    # N.N.N-N (legacy single-digit packaging suffix)
+    # N.N.N-N (Cloudron-compatible repackaged suffix)
     if [[ "${version}" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)$ ]]; then
         local maj="${BASH_REMATCH[1]}"
         local min="${BASH_REMATCH[2]}"
         local pat="${BASH_REMATCH[3]}"
-        local pkg_maj="${BASH_REMATCH[4]}"
-        echo "${maj}.${min}.${pat}-${pkg_maj}.1"
+        local pkg_iter="${BASH_REMATCH[4]}"
+        pkg_iter=$((pkg_iter + 1))
+        echo "${maj}.${min}.${pat}-${pkg_iter}"
         return
     fi
 
@@ -234,7 +236,7 @@ if [ -n "${SUGGESTED_VERSION}" ]; then
         NEW_VERSION="${SUGGESTED_VERSION}"
     fi
 else
-    echo -e "${YELLOW}(Version format is not N.N.N, cannot auto-suggest increment)${NC}"
+    echo -e "${YELLOW}(Version format is not recognized, cannot auto-suggest increment)${NC}"
     echo
     read -p "Enter new version: " NEW_VERSION
 fi

@@ -3,19 +3,11 @@ import { useState } from 'react';
 import classes from './QuickCommands.module.css';
 import { IconSettingsAutomation, IconCopy } from '@tabler/icons-react';
 import lanCommandOption from '../../../helpers/functions/lanCommandOption';
-
-type WizardEnvType = {
-  UNIX_USER?: string;
-  FQDN?: string;
-  FQDN_LAN?: string;
-  SSH_SERVER_PORT?: string | number;
-  SSH_SERVER_PORT_LAN?: string | number;
-  HIDE_SSH_PORT?: string;
-};
+import { WizardEnvType } from '~/types';
 
 type QuickCommandsProps = {
   repositoryName: string;
-  wizardEnv?: WizardEnvType;
+  wizardEnv?: Partial<WizardEnvType>;
   lanCommand?: boolean;
 };
 

@@ -22,10 +22,10 @@ git push origin main
 
 ## Version scheme
 
-Cloudron-Borgwarehouse is a **repackaged third-party app**: it wraps [upstream BorgWarehouse](https://github.com/Ravinou/borgwarehouse) and uses the `N.N.N-N.N` version format:
+Cloudron-Borgwarehouse is a **repackaged third-party app**: it wraps [upstream BorgWarehouse](https://github.com/Ravinou/borgwarehouse) and uses the `N.N.N-N` version format:
 
 - `N.N.N` — upstream BorgWarehouse version (e.g. `3.1.2`)
-- `-N.N` — BluePants packaging iteration (`-1.0` was the first BluePants release; `-1.1` was the second; etc.)
+- `-N` — BluePants packaging iteration (`-11` was an earlier packaging release; `-12` is the next; etc.)
 
 Whatever the format, the version must agree across three files. The `cloudron-build.sh`
 script verifies this on every run and prompts you to sync any drift before building:
@@ -225,7 +225,7 @@ Wrapper for building with automatic version management.
 
 **Features:**
 - Checks version consistency across `CloudronManifest.json`, `version.txt`, `Dockerfile`.
-- Auto-increments `N.N.N` and `N.N.N-N.N` formats.
+- Auto-increments `N.N.N` and `N.N.N-N` formats.
 - Updates all three version files in lockstep.
 - Builds the image via the Cloudron build service.
 - Detects existing installations and offers to deploy.

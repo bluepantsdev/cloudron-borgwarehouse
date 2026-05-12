@@ -12,17 +12,9 @@ import StorageBar from '../UI/StorageBar/StorageBar';
 import QuickCommands from './QuickCommands/QuickCommands';
 import { fromUnixTime, formatDistanceStrict } from 'date-fns';
 import useMedia from 'use-media';
+import { WizardEnvType } from '~/types';
 
 type Optional<T> = T | null | undefined;
-
-type WizardEnvType = {
-  UNIX_USER?: string;
-  FQDN?: string;
-  FQDN_LAN?: string;
-  SSH_SERVER_PORT?: string | number;
-  SSH_SERVER_PORT_LAN?: string | number;
-  HIDE_SSH_PORT?: string;
-};
 
 type RepoProps = {
   id: string | number;
@@ -35,9 +27,10 @@ type RepoProps = {
   repositoryName: string;
   storageSize: number;
   storageUsed: number;
+  sshPublicKey?: string;
   lanCommand?: boolean;
   repoManageEditHandler: () => void;
-  wizardEnv: Optional<WizardEnvType>;
+  wizardEnv: Optional<Partial<WizardEnvType>>;
 };
 
 export default function Repo(props: RepoProps) {

@@ -1,5 +1,11 @@
 # Version History
 
+## 3.1.2-14 - 2026-05-12
+
+- Switched package versioning to Cloudron-compatible pkgsemver prerelease format `N.N.N-N`.
+- Migrated current release identifier from `3.1.2-1.4` to `3.1.2-14` for build compatibility.
+- Updated `cloudron-build.sh`, `README.md`, and deployment docs to use and auto-increment the new format.
+
 ## 3.1.2-1.3 - 2026-05-11
 
 - Added BluePants deployment workflow: `cloudron-build.sh` (version-managed build wrapper with consistency checks + auto-increment for `N.N.N-N.N` format), `cloudron-publish.sh` (community registry publisher), and `deployment.config`.

@@ -5,8 +5,8 @@
   "author": "Shaun Sundquist <support@bluepants.dev>",
   "description": "file://DESCRIPTION.md",
   "tagline": "Web UI for BorgBackup repositories",
-  "changelog": "file://VersionHistory.md",
-  "version": "3.1.2-1.3",
+  "changelog": "file://CHANGELOG.md",
+  "version": "3.1.2-15",
   "healthCheckPath": "/",
   "httpPort": 3000,
   "tcpPorts": {
@@ -24,7 +24,18 @@
   "website": "https://bluepants.dev",
   "contactEmail": "support@bluepants.dev",
   "icon": "logo.png",
-  "tags": ["backup", "borg", "storage", "ssh"],
-  "mediaLinks": [],
-  "minBoxVersion": "7.0.0"
+  "tags": [
+    "backup",
+    "borg",
+    "storage",
+    "ssh"
+  ],
+  "mediaLinks": [
+    "https://example.com/screenshot.png"
+  ],
+  "minBoxVersion": "9.1.0",
+  "iconUrl": "https://bluepants.dev",
+  "packagerName": "Bluepants.dev",
+  "packagerUrl": "https://bluepants.dev",
+  "postInstallMessage": "file://POSTINSTALL.md"
 }

@@ -24,16 +24,16 @@ git push origin main
 ./cloudron-publish.sh
 ```
 
-The `cloudron-build.sh` wrapper checks that `CloudronManifest.json`, `version.txt`, and the `Dockerfile` image-version label (in the `runner` stage) all agree, suggests the next version (auto-incrementing the `N.N.N-N.N` packaging suffix), updates all three files in lockstep, and runs `cloudron build`.
+The `cloudron-build.sh` wrapper checks that `CloudronManifest.json`, `version.txt`, and the `Dockerfile` image-version label (in the `runner` stage) all agree, suggests the next version (auto-incrementing the `N.N.N-N` packaging suffix), updates all three files in lockstep, and runs `cloudron build`.
 
 ---
 
 ## Version scheme
 
-Cloudron-Borgwarehouse uses the BluePants repackaged-app format `N.N.N-N.N`:
+Cloudron-Borgwarehouse uses a Cloudron-compatible repackaged-app format `N.N.N-N`:
 
 - `N.N.N` — upstream BorgWarehouse version (e.g. `3.1.2`)
-- `-N.N` — BluePants packaging iteration
+- `-N` — BluePants packaging iteration (monotonic numeric prerelease)
 
 See [VersionHistory.md](VersionHistory.md) for the per-version changelog.
 
