@@ -27,6 +27,11 @@ RUN npm run build
 # Run stage
 FROM base AS runner
 
+LABEL org.opencontainers.image.title="Borg Warehouse" \
+      org.opencontainers.image.description="Self-hosted web UI for managing BorgBackup repositories." \
+      org.opencontainers.image.authors="Shaun Sundquist <support@bluepants.dev>" \
+      org.opencontainers.image.version="3.1.2-1.3"
+
 ARG UID
 ARG GID
 

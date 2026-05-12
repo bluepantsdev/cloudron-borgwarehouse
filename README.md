@@ -1,5 +1,44 @@
 # Cloudron app - Borg Warehouse
 
+A Cloudron package for [BorgWarehouse](https://github.com/Ravinou/borgwarehouse) — a self-hosted web UI for managing BorgBackup repositories. Provision repos, control SSH access for Borg clients, monitor backup status, and receive alerts when backups fall behind.
+
+---
+
+## Deployment
+
+See [docs/Deployment.md](docs/Deployment.md) for full instructions covering one-time infrastructure setup, building, deploying, and publishing to the community.
+
+### Quick workflow
+
+After [one-time infrastructure setup](docs/Deployment.md#one-time-infrastructure-setup):
+
+```bash
+# Make changes, then:
+git commit -am "Describe the change"
+git push origin main
+
+# Build via the Cloudron build service with version management:
+./cloudron-build.sh
+
+# When ready to publish to the community:
+./cloudron-publish.sh
+```
+
+The `cloudron-build.sh` wrapper checks that `CloudronManifest.json`, `version.txt`, and the `Dockerfile` image-version label (in the `runner` stage) all agree, suggests the next version (auto-incrementing the `N.N.N-N.N` packaging suffix), updates all three files in lockstep, and runs `cloudron build`.
+
+---
+
+## Version scheme
+
+Cloudron-Borgwarehouse uses the BluePants repackaged-app format `N.N.N-N.N`:
+
+- `N.N.N` — upstream BorgWarehouse version (e.g. `3.1.2`)
+- `-N.N` — BluePants packaging iteration
+
+See [VersionHistory.md](VersionHistory.md) for the per-version changelog.
+
+---
+
 ## Entrypoint Scripts
 
 | File | Used by | Purpose |

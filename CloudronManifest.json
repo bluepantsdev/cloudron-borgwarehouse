@@ -1,10 +1,12 @@
 {
-  "id": "com.bluepants.borgwarehouse",
+  "manifestVersion": 2,
+  "id": "dev.bluepants.borgwarehouse",
   "title": "Borg Warehouse",
-  "author": "Shaun Sundquist <shaun@bluepants.dev>",
-  "description": "Borg Warehouse",
+  "author": "Shaun Sundquist <support@bluepants.dev>",
+  "description": "file://DESCRIPTION.md",
   "tagline": "Web UI for BorgBackup repositories",
-  "version": "3.1.2-1",
+  "changelog": "file://VersionHistory.md",
+  "version": "3.1.2-1.3",
   "healthCheckPath": "/",
   "httpPort": 3000,
   "tcpPorts": {
@@ -19,10 +21,10 @@
   "addons": {
     "localstorage": {}
   },
-  "manifestVersion": 2,
   "website": "https://bluepants.dev",
   "contactEmail": "support@bluepants.dev",
-  "icon": "file://borgwarehouse-logo.png",
-  "tags": [ "test", "collaboration" ],
-  "mediaLinks": [ "https://images.rapgenius.com/fd0175ef780e2feefb30055be9f2e022.520x343x1.jpg" ]
+  "icon": "logo.png",
+  "tags": ["backup", "borg", "storage", "ssh"],
+  "mediaLinks": [],
+  "minBoxVersion": "7.0.0"
 }
