@@ -64,7 +64,6 @@ function SetupWizard(props: SetupWizardProps) {
   useEffect(() => {
     //Go to the step in the URL param when URL change
     if (props.step) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStep(props.step);
     }
   }, [props.step]);

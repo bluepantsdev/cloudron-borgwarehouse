@@ -36,6 +36,11 @@
   ],
   "exclude": [
     "node_modules",
-    "borgwarehouse-3.1.2"
+    "borgwarehouse-3.1.2",
+    "tests",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__mocks__/**",
+    "vitest.config.ts"
   ]
 }

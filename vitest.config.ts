@@ -15,5 +15,7 @@ export default defineConfig({
     alias: {
       '~': path.resolve(__dirname, './'),
     },
+    // Prefer TypeScript sources over legacy .js siblings (e.g. lanCommandOption.ts vs .js).
+    extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
   },
 });
