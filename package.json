@@ -6,7 +6,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
+        "lint": "eslint .",
         "setup": "npm install && npm run setup:hooks",
         "setup:hooks": "npx husky install",
         "format": "prettier --write \"{Components,Containers,helpers,pages,styles}/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
@@ -36,11 +36,14 @@
     "devDependencies": {
         "@commitlint/cli": "^19.7.1",
         "@commitlint/config-conventional": "^19.7.1",
+        "@eslint/eslintrc": "^3.3.7",
         "@types/node": "^25.6.0",
         "@types/nprogress": "^0.2.3",
         "@types/react": "19.3.0",
-        "eslint-config-next": "^15.1.6",
+        "eslint": "^9.39.0",
+        "eslint-config-next": "^15.5.18",
         "husky": "^9.1.7",
+        "node-mocks-http": "^1.17.2",
         "prettier": "^3.5.1",
         "typescript": "^6.0.2",
         "vitest": "^4.1.12"

@@ -64,7 +64,6 @@ export default function RepoList() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayRepoAdd(router.pathname === '/manage-repo/add');
     setDisplayRepoEdit(router.pathname.startsWith('/manage-repo/edit'));
 
